@@ -4,9 +4,13 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-db-migration
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
+    {{- if .Release.IsInstall }}
+    "helm.sh/hook": pre-install
+    {{- else if and (not .Release.IsInstall) .Values.enterprise.migration.upgradeEnabled }}
+    "helm.sh/hook": pre-upgrade
+    {{- end }}
     "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": "hook-succeeded,before-hook-creation"
 spec:
   template:
     spec:
