@@ -35,6 +35,8 @@ kubectl get nodes    # Verify connectivity
 
 This is required for first-time cluster setup:
 
+*Note:* If ingress controller already exists you can skip this step.
+
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/do/deploy.yaml
 ```
@@ -61,15 +63,26 @@ helm repo update
 
 ```bash
 kubectl create namespace [your-namespace]
+
+# Check current context
+kubectl config get-contexts
+
+# If context is not updated, update it using:
+kubectl config use-context [your-context-name]
+
+# Verify current context
+kubectl config current-context
+
+# Set namespace for current context
 kubectl config set-context --current --namespace=[your-namespace]
 ```
 
 ### 3. Configure Values
 
-Create a `values.yaml` file with your configurations:
+Create a values configuration file with your settings:
 
 ```yaml
-# Example values.yaml
+# Example configuration
 ingress:
   enabled: true
   annotations:
@@ -89,7 +102,15 @@ resources:
 ```bash
 helm install [release-name] [chart-name] \
   --namespace [your-namespace] \
-  -f values.yaml
+  -f [path-to-values-file]
+```
+
+Example:
+
+```bash
+helm install my-release my-chart \
+  --namespace my-namespace \
+  -f ./values.yaml
 ```
 
 ## Configuration
@@ -147,7 +168,7 @@ kubectl get ingress -n [your-namespace]  # Note the ADDRESS field
 helm repo update
 helm upgrade [release-name] [chart-name] \
   --namespace [your-namespace] \
-  -f values.yaml
+  -f [path-to-values-file]
 ```
 
 ### Rollback
