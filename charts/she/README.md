@@ -23,13 +23,50 @@ This Helm chart bootstraps Hoppscotch Enterprise Edition deployment on a Kuberne
 
 ## URLs Configuration
 
-Update the URLs for frontend, backend, and admin in the `values.yaml` file as follows:
+Update the URLs for mainHost, backendHost, adminHost and related urls in the `values.yaml`:
 
 ```yaml
-urls:
-  frontend: "https://frontend.yourdomain.com"
-  backend: "https://backend.yourdomain.com"
-  admin: "https://admin.yourdomain.com"
+  urls:
+    base: "http://frontend.yourdomain.com"
+    shortcode: "http://frontend.yourdomain.com"
+    admin: "http://admin.yourdomain.com"
+    backend:
+      gql: "http://backend.yourdomain.com/graphql"
+      ws: "ws://backend.yourdomain.com/graphql"
+      api: "http://backend.yourdomain.com/v1"
+    redirect: "http://frontend.yourdomain.com"
+    whitelistedOrigins: "http://backend.yourdomain.com,http://frontend.yourdomain.com,http://admin.yourdomain.com"
+
+  # Ingress Configuration
+  ingress:
+    enabled: true
+    mainHost: frontend.yourdomain.com
+    adminHost: admin.yourdomain.com
+    backendHost: backend.yourdomain.com
+```
+when **subpath is enabled**. Only update the mainHost and related urls:
+```yaml
+  urls:
+    base: "http://yourdomain.com"
+    shortcode: "http://yourdomain.com"
+    admin: "http://yourdomain.com/admin"
+    backend:
+      gql: "http://yourdomain.com/backend/graphql"
+      ws: "ws://yourdomain.com/backend/graphql"
+      api: "http://yourdomain.com/backend/v1"
+    redirect: "http://yourdomain.com"
+    whitelistedOrigins: "http://yourdomain.com/backend,http://yourdomain.com,http://yourdomain.com/admin"
+
+  enableSubpathBasedAccess: true
+  
+  # Ingress Configuration
+  ingress:
+    enabled: true
+    mainHost: "yourdomain.com"
+    # Services will be available at:
+    # - Main: yourdomain.com
+    # - Backend: yourdomain.com/backend
+    # - Admin: yourdomain.com/admin
 ```
 
 ## Configuration
