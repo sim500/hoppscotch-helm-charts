@@ -145,6 +145,7 @@ service:
     adminHost: admin.example.com
     backendHost: backend.example.com
     className: nginx # nginx, alb, traefik
+    annotatios: {}
 
   # TLS Configuration
   tls:
