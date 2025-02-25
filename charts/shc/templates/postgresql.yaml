@@ -45,6 +45,8 @@ spec:
         storageClassName: ""
       {{- else }}
         storageClassName: "{{ .Values.community.config.postgresql.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
       resources:
         requests:
           storage: {{ .Values.community.config.postgresql.persistence.size }}
