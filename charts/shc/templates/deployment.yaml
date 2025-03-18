@@ -70,6 +70,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-community-config
+            - secretRef:
+              {{- if .Values.community.config.auth.existingSecret }}
+                name: {{ .Values.community.config.auth.existingSecret }}
+              {{- else }}
+                name: {{ .Release.Name }}-auth-config
+              {{- end }}
           resources:
             {{- toYaml .Values.community.resources | nindent 12 }}
       {{- if .Values.community.config.affinityEnabled }}
