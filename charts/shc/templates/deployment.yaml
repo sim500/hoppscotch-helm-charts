@@ -36,22 +36,21 @@ spec:
               sleep 2
             done
       {{- end }}
-      - name: wait-for-migration
-        image: bitnami/kubectl:latest
+      - name: db-migration
+        image: "{{ .Values.community.image.repository }}:{{ .Values.community.image.tag }}"
         command:
           - /bin/sh
           - -c
           - |
-            echo "Waiting for migration to complete..."
-            while true; do
-              echo "Running kubectl command to check job status..."
-              if [ "$(kubectl get job {{ .Release.Name }}-db-migration -o jsonpath='{.status.succeeded}')" = "1" ]; then
-                echo "Migration completed."
-                break
-              fi
-              echo "Migration not yet completed. Retrying in 2 seconds..."
-              sleep 2
-            done
+            echo "Running database migrations..."
+            pnpx prisma migrate deploy
+        env:
+          - name: DATABASE_URL
+            {{- if .Values.community.config.database.external }}
+            value: {{ .Values.community.config.database.url | quote }}
+            {{- else }}
+            value: "postgresql://{{ .Values.community.config.postgresql.username }}:{{ .Values.community.config.postgresql.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.community.config.postgresql.database }}?schema=public"
+            {{- end }}
       containers:
         - name: community
           image: "{{ .Values.community.image.repository }}:{{ .Values.community.image.tag }}"
