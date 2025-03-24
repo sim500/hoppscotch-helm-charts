@@ -46,10 +46,13 @@ spec:
             pnpx prisma migrate deploy
         env:
           - name: DATABASE_URL
-            {{- if .Values.community.config.database.external }}
-            value: {{ .Values.community.config.database.url | quote }}
+            {{- if .Values.community.config.postgresql.existingSecret.urlKey }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.community.config.postgresql.existingSecret.secretName | default (printf "%s-db" .Release.Name) }}
+                key: {{ .Values.community.config.postgresql.existingSecret.urlKey }}
             {{- else }}
-            value: "postgresql://{{ .Values.community.config.postgresql.username }}:{{ .Values.community.config.postgresql.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.community.config.postgresql.database }}?schema=public"
+            value: {{ .Values.community.config.postgresql.url | quote }}
             {{- end }}
       containers:
         - name: community
