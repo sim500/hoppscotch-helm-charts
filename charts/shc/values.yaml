@@ -32,6 +32,14 @@ community:
       username: hoppscotch
       password: hoppscotch123
 
+      existingSecret:
+        enabled: false
+        # secretName: nameofsecret
+        usernameKey: db-username
+        passwordKey: db-password
+        # databaseKey: db-name
+
+
     mailer:
       enable: false
       useCustomConfigs: false
@@ -75,6 +83,7 @@ community:
     auth:
       allowedProviders: "GOOGLE,MICROSOFT,GITHUB,EMAIL"
 
+      existingSecret: ""
       google:
         clientId: "dummyGoogleClientId"
         clientSecret: "dummyGoogleClientSecret"

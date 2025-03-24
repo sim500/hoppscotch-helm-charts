@@ -21,11 +21,32 @@ spec:
         image: {{ .Values.community.config.postgresql.image }}
         env:
         - name: POSTGRES_DB
-          value: {{ .Values.community.config.postgresql.database }}
+          {{- if .Values.community.config.postgresql.existingSecret.databaseKey }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.community.config.postgresql.existingSecret.secretName | default (printf "%s-db" .Release.Name) }}
+              key: {{ .Values.community.config.postgresql.existingSecret.databaseKey }}
+          {{- else }}
+          value: {{ .Values.community.config.postgresql.database | quote }}
+          {{- end }}
         - name: POSTGRES_USER
-          value: {{ .Values.community.config.postgresql.username }}
+          {{- if .Values.community.config.postgresql.existingSecret.usernameKey }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.community.config.postgresql.existingSecret.secretName | default (printf "%s-db" .Release.Name) }}
+              key: {{ .Values.community.config.postgresql.existingSecret.usernameKey }}
+          {{- else }}
+          value: {{ .Values.community.config.postgresql.username | quote }}
+          {{- end }}
         - name: POSTGRES_PASSWORD
-          value: {{ .Values.community.config.postgresql.password }}
+          {{- if .Values.community.config.postgresql.existingSecret.passwordKey }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.community.config.postgresql.existingSecret.secretName | default (printf "%s-db" .Release.Name) }}
+              key: {{ .Values.community.config.postgresql.existingSecret.passwordKey }}
+          {{- else }}
+          value: {{ .Values.community.config.postgresql.password | quote }}
+          {{- end }}
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
         ports:
