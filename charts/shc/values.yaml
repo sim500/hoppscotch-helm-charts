@@ -33,9 +33,10 @@ community:
 
       existingSecret:
         enabled: false
-        # secretName: nameofsecret
+        # secretName: hoppscotch-db
         usernameKey: db-username
         passwordKey: db-password
+        urlKey: db-url
         # databaseKey: db-name
 
 
