@@ -102,10 +102,6 @@ community:
 
 # Service configuration
 service:
-  apiVersion: v1
-  name: hoppscotch-community
-  app: hoppscotch-community
-  # Dynamically set based on ingress
   type: "{{ .Values.service.ingress.enabled | ternary \"ClusterIP\" \"LoadBalancer\" }}"
   cloud:
     provider: "" # gke, aws, azure
@@ -118,23 +114,15 @@ service:
     backend:
       port: 3170
       targetPort: 3170
-      protocol: TCP
-      name: backend
     frontend:
       port: 3000
       targetPort: 3000
-      protocol: TCP
-      name: frontend
     admin:
       port: 3100
       targetPort: 3100
-      protocol: TCP
-      name: admin
     subpath:
       port: 80
       targetPort: 80
-      protocol: TCP
-      name: subpath
   selector:
     app: hoppscotch-community
 
