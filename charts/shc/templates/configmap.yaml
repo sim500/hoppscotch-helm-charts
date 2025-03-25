@@ -3,9 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-community-config
 data:
-  # Database
-  DATABASE_URL: {{ if .Values.community.config.database.external }}{{ .Values.community.config.database.url | quote }}{{ else }}{{ printf "postgres://%s:%s@%s-postgresql:5432/%s?sslmode=disable" .Values.community.config.postgresql.username .Values.community.config.postgresql.password .Release.Name .Values.community.config.postgresql.database | quote }}{{ end }}
-
   # Mailer
   MAILER_SMTP_ENABLE: {{ .Values.community.config.mailer.enable | quote }}
   MAILER_USE_CUSTOM_CONFIGS: {{ .Values.community.config.mailer.useCustomConfigs | quote }}

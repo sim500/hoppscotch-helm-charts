@@ -32,7 +32,7 @@ spec:
           - /bin/sh
           - -c
           - |
-            until pg_isready -h {{ .Release.Name }}-postgresql -p 5432 -U {{ .Values.community.config.postgresql.username }}; do
+            until pg_isready -h {{ .Release.Name }}-postgresql -p 5432 -U {{ .Values.community.config.database.username }}; do
               sleep 2
             done
       {{- end }}
@@ -68,15 +68,28 @@ spec:
             - containerPort: {{ .Values.service.ports.admin.targetPort }}
               name: {{ .Values.service.ports.admin.name }}
           {{- end }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                {{- if .Values.community.config.database.existingSecret.urlKey }}
+                  name: {{ .Values.community.config.database.existingSecret.secretName | default (printf "%s-db" .Release.Name) }}
+                  key: {{ .Values.community.config.database.existingSecret.urlKey }}
+                {{- else }}
+                  name: {{ .Release.Name }}-community-secret
+                  key: DATABASE_URL
+                {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-community-config
+            {{- if ne .Values.community.config.auth.allowedProviders "EMAIL" }}
             - secretRef:
               {{- if .Values.community.config.auth.existingSecret }}
                 name: {{ .Values.community.config.auth.existingSecret }}
               {{- else }}
-                name: {{ .Release.Name }}-auth-config
+                name: {{ .Release.Name }}-community-secret
               {{- end }}
+            {{- end}}
           resources:
             {{- toYaml .Values.community.resources | nindent 12 }}
       {{- if .Values.community.config.affinityEnabled }}
