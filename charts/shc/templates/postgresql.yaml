@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: postgresql
-        image: {{ .Values.community.config.postgresql.image }}
+        image: {{ .Values.community.config.database.postgresql.image }}
         env:
         - name: POSTGRES_DB
           {{- if .Values.community.config.database.existingSecret.databaseKey }}
@@ -61,16 +61,16 @@ spec:
       name: postgresql-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      {{- if .Values.community.config.postgresql.persistence.storageClass }}
-      {{- if (eq "-" .Values.community.config.postgresql.persistence.storageClass) }}
+      {{- if .Values.community.config.database.postgresql.persistence.storageClass }}
+      {{- if (eq "-" .Values.community.config.database.postgresql.persistence.storageClass) }}
       storageClassName: ""
       {{- else }}
-      storageClassName: "{{ .Values.community.config.postgresql.persistence.storageClass }}"
+      storageClassName: "{{ .Values.community.config.database.postgresql.persistence.storageClass }}"
       {{- end }}
       {{- end }}
       resources:
         requests:
-          storage: {{ .Values.community.config.postgresql.persistence.size }}
+          storage: {{ .Values.community.config.database.postgresql.persistence.size }}
 ---
 apiVersion: v1
 kind: Service
