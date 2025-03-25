@@ -23,10 +23,20 @@ spec:
           - -c
           - |
             echo "Waiting for PostgreSQL..."
-            until pg_isready -h {{ .Release.Name }}-postgresql -p 5432 -U {{ .Values.community.config.postgresql.username }}; do
+            until pg_isready -h {{ .Release.Name }}-postgresql -p 5432 -U $POSTGRES_USER; do
               sleep 2
             done
             echo "PostgreSQL is ready"
+        env:
+          - name: POSTGRES_USER
+            {{- if .Values.community.config.database.existingSecret.usernameKey }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.community.config.database.existingSecret.secretName | default (printf "%s-db" .Release.Name) }}
+                key: {{ .Values.community.config.database.existingSecret.usernameKey }}
+            {{- else }}
+            value: {{ .Values.community.config.database.username | quote }}
+            {{- end }}
       {{- end }}
       containers:
       - name: db-migration
@@ -36,11 +46,16 @@ spec:
           - -c
           - |
             echo "Running database migrations..."
+            export DATABASE_URL="$DATABASE_URL&schema=public"
             pnpx prisma migrate deploy
         env:
           - name: DATABASE_URL
-            {{- if .Values.community.config.database.external }}
-            value: {{ .Values.community.config.database.url | quote }}
-            {{- else }}
-            value: "postgresql://{{ .Values.community.config.postgresql.username }}:{{ .Values.community.config.postgresql.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.community.config.postgresql.database }}?schema=public"
-            {{- end }}
+            valueFrom:
+              secretKeyRef:
+              {{- if .Values.community.config.database.existingSecret.urlKey }}
+                name: {{ .Values.community.config.database.existingSecret.secretName | default (printf "%s-db" .Release.Name) }}
+                key: {{ .Values.community.config.database.existingSecret.urlKey }}
+              {{- else }}
+                name: {{ .Release.Name }}-community-secret
+                key: DATABASE_URL
+              {{- end }}

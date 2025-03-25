@@ -22,12 +22,8 @@ community:
   config:
     database:
       external: false # Flag to use external DB, if false, it will use the internal postgresql created by the helm chart
-      url: "postgres://user:password@hostname:port/database?sslmode=require" # External database URL if provided
-    postgresql:
-      image: postgres:15
-      persistence:
-        size: 8Gi
-        storageClass: ""
+      url: "" # "postgres://user:password@hostname:port/database?sslmode=require" Overwrite default url created
+      ssl: enable
       database: hoppscotchCommunity
       username: hoppscotch
       password: hoppscotch123
@@ -35,10 +31,16 @@ community:
       existingSecret:
         enabled: false
         # secretName: hoppscotch-db
+        databaseKey: db-name
         usernameKey: db-username
         passwordKey: db-password
-        urlKey: db-url
-        # databaseKey: db-name
+        urlKey: "" # db-url, if specified, will use this value as url for connection
+
+      postgresql:
+        image: postgres:15
+        persistence:
+          size: 8Gi
+          storageClass: ""
 
 
     mailer:
@@ -82,7 +84,7 @@ community:
       whitelistedOrigins: "http://backend.example.com,http://frontend.example.com,http://admin.example.com"
 
     auth:
-      allowedProviders: "GOOGLE,MICROSOFT,GITHUB,EMAIL"
+      allowedProviders: "EMAIL" # "GOOGLE,MICROSOFT,GITHUB,EMAIL"
 
       existingSecret: ""
       google:
