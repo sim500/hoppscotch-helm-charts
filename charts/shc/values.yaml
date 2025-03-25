@@ -88,23 +88,23 @@ community:
 
       existingSecret: ""
       google:
-        clientId: "dummyGoogleClientId"
-        clientSecret: "dummyGoogleClientSecret"
-        callbackUrl: "http://backend.example.com/v1/auth/google/callback"
-        scope: "email,profile"
+        clientId:  "" # "dummyGoogleClientId"
+        clientSecret:  "" # "dummyGoogleClientSecret"
+        callbackUrl:  "" # "http://backend.example.com/v1/auth/google/callback"
+        scope:  "" # "email,profile"
 
       github:
-        clientId: "dummyGithubClientId"
-        clientSecret: "dummyGithubClientSecret"
-        callbackUrl: "http://backend.example.com/v1/auth/github/callback"
-        scope: "user:email"
+        clientId:  "" # "dummyGithubClientId"
+        clientSecret:  "" # "dummyGithubClientSecret"
+        callbackUrl:  "" # "http://backend.example.com/v1/auth/github/callback"
+        scope:  "" # "user:email"
 
       microsoft:
-        clientId: "dummyMicrosoftClientId"
-        clientSecret: "dummyMicrosoftClientSecret"
-        callbackUrl: "http://backend.example.com/v1/auth/microsoft/callback"
-        scope: "user.read"
-        tenant: "dummyTenantId"
+        clientId:  "" # "dummyMicrosoftClientId"
+        clientSecret:  "" # "dummyMicrosoftClientSecret"
+        callbackUrl:  "" # "http://backend.example.com/v1/auth/microsoft/callback"
+        scope:  "" # "user.read"
+        tenant:  "" # "dummyTenantId"
 
     community:
       enableSubpathBasedAccess: false
