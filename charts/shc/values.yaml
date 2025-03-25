@@ -73,15 +73,16 @@ community:
       dataEncryptionKey: "data encryption key with 32 char"
 
     urls:
-      base: "http://frontend.example.com"
-      shortcode: "http://frontend.example.com"
-      admin: "http://admin.example.com"
+      https: true
+      base: "" # "http://frontend.example.com"
+      shortcode: "" # "http://frontend.example.com"
+      admin: "" # "http://admin.example.com"
       backend:
-        gql: "http://backend.example.com/graphql"
-        ws: "ws://backend.example.com/graphql"
-        api: "http://backend.example.com/v1"
-      redirect: "http://frontend.example.com"
-      whitelistedOrigins: "http://backend.example.com,http://frontend.example.com,http://admin.example.com"
+        gql: "" # "http://backend.example.com/graphql"
+        ws: "" # "ws://backend.example.com/graphql"
+        api: "" # "http://backend.example.com/v1"
+      redirect: "" # "http://frontend.example.com"
+      whitelistedOrigins: ""  # "http://backend.example.com,http://frontend.example.com,http://admin.example.com"
 
     auth:
       allowedProviders: "EMAIL" # "GOOGLE,MICROSOFT,GITHUB,EMAIL"
