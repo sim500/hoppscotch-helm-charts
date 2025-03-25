@@ -3,7 +3,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.service.name }}
+  name: {{ .Release.Name }}-community
   annotations:
     {{- if .Values.service.cloud.provider | eq "gke" }}
     networking.gke.io/load-balancer-type: "External"
@@ -50,21 +50,21 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.service.name }}
+            name: {{ .Release.Name }}-community
             port:
               number: {{ .Values.service.ports.subpath.port }}
       - path: /backend
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.service.name }}
+            name: {{ .Release.Name }}-community
             port:
               number: {{ .Values.service.ports.subpath.port }}
       - path: /admin
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.service.name }}
+            name: {{ .Release.Name }}-community
             port:
               number: {{ .Values.service.ports.subpath.port }}
   {{- else }}
@@ -76,7 +76,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.service.name }}
+            name: {{ .Release.Name }}-community
             port:
               number: 3000
   
@@ -87,7 +87,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.service.name }}
+            name: {{ .Release.Name }}-community
             port:
               number: 3100
   
@@ -98,7 +98,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.service.name }}
+            name: {{ .Release.Name }}-community
             port:
               number: 3170
   {{- end }}
