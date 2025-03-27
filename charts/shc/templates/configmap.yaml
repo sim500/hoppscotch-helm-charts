@@ -36,7 +36,8 @@ data:
   {{- $admin_url := printf "%s://%s" $protocol ( .Values.community.config.community.enableSubpathBasedAccess | ternary (printf "%s/admin" .Values.service.ingress.mainHost) .Values.service.ingress.adminHost ) -}}
   {{- $backend_url := .Values.community.config.community.enableSubpathBasedAccess | ternary (printf "%s/backend" .Values.service.ingress.mainHost) .Values.service.ingress.backendHost -}}
   {{- $http_backend_url := printf "%s://%s" $protocol $backend_url -}}
-  {{- $app_url := printf "app://%s" (.Values.service.ingress.mainHost | replace "." "_") -}}
+  {{- $url_underscore := (.Values.service.ingress.mainHost | replace "." "_") -}}
+  {{- $app_url := printf "app://%s,http://app.%s" $url_underscore $url_underscore -}}
 
   VITE_BASE_URL: {{ .Values.community.config.urls.base | default $base_url | quote }}
   VITE_SHORTCODE_BASE_URL: {{ .Values.community.config.urls.shortcode | default $base_url | quote }}
