@@ -34,6 +34,7 @@ data:
 
   # URLs and Frontend Config
   {{ $protocol := .Values.community.config.urls.https | ternary "https" "http" -}}
+  {{ $wsprotocol := .Values.community.config.urls.https | ternary "wss" "ws" -}}
   {{- $base_url := printf "%s://%s" $protocol .Values.service.ingress.mainHost -}}
   {{- $admin_url := printf "%s://%s" $protocol ( .Values.community.config.community.enableSubpathBasedAccess | ternary (printf "%s/admin" .Values.service.ingress.mainHost) .Values.service.ingress.adminHost ) -}}
   {{- $backend_url := .Values.community.config.community.enableSubpathBasedAccess | ternary (printf "%s/backend" .Values.service.ingress.mainHost) .Values.service.ingress.backendHost -}}
@@ -45,7 +46,7 @@ data:
   REDIRECT_URL: {{ .Values.community.config.urls.base | default $base_url | quote }}
   VITE_ADMIN_URL: {{ .Values.community.config.urls.admin | default $admin_url | quote }}
   VITE_BACKEND_GQL_URL: {{ .Values.community.config.urls.backend.gql | default (printf "%s/graphql" $http_backend_url) | quote }}
-  VITE_BACKEND_WS_URL: {{ .Values.community.config.urls.backend.ws | default (printf "ws://%s/graphql" $backend_url) | quote }}
+  VITE_BACKEND_WS_URL: {{ .Values.community.config.urls.backend.ws | default (printf "%s://%s/graphql" $wsprotocol $backend_url) | quote }}
   VITE_BACKEND_API_URL: {{ .Values.community.config.urls.backend.api | default (printf "%s/v1" $http_backend_url) | quote }}
   WHITELISTED_ORIGINS: {{ printf "%s,%s,%s,%s,%s" $base_url $admin_url $http_backend_url $app_url (.Values.community.config.urls.whitelistedOrigins | default "") | quote }}
 
