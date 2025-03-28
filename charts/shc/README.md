@@ -34,6 +34,7 @@ Update the URLs for mainHost, backendHost, adminHost and related urls in the `va
     mainHost: frontend.yourdomain.com
     adminHost: admin.yourdomain.com
     backendHost: backend.yourdomain.com
+    annotations: {}
 ```
 when **subpath is enabled**. Only update the mainHost and related urls:
 ```yaml
@@ -58,6 +59,7 @@ when **subpath is enabled**. Only update the mainHost and related urls:
     # - Main: yourdomain.com
     # - Backend: yourdomain.com/backend
     # - Admin: yourdomain.com/admin
+    annotations: {}
 ```
 
 ## Configuration
