@@ -20,9 +20,9 @@ metadata:
     service.kubernetes.io/load-balancer-type: "External"
     {{- end }}
 spec:
-  type: {{ ternary "ClusterIP" "LoadBalancer" .Values.service.ingress.enabled }}
-  
-  {{- if not .Values.service.ingress.enabled }}
+  type: {{ .Values.service.type }}
+
+  {{- if eq .Values.service.type "LoadBalancer" }}
   loadBalancerIP: {{ .Values.global.externalIP }}
   externalTrafficPolicy: Cluster
   {{- end }}
